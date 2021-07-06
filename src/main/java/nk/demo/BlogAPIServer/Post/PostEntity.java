@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -37,13 +38,17 @@ public class PostEntity {
 	@CreatedDate
 	@Column(updatable = false)
 	private LocalDateTime 	regDate;		//등록일자
+
+	@LastModifiedDate
+	private LocalDateTime 		updateDate;		//수정일자
 	
 	@Builder
-	public PostEntity(Long postId, String title, Long userId, String contents, LocalDateTime regDate) {
+	public PostEntity(Long postId, String title, Long userId, String contents, LocalDateTime regDate, LocalDateTime updateDate) {
 		this.postId = postId;
 		this.title = title;
 		this.userId = userId;
 		this.contents = contents;
 		this.regDate = regDate;
+		this.updateDate =  updateDate;
 	}
 }

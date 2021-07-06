@@ -17,6 +17,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) throws IOException,
             ServletException {
-        response.sendRedirect("/JWTException/EmptyJWTToken");
+        response.setStatus(HttpServletResponse.SC_SEE_OTHER);
+        response.setHeader("Location","/JWTException/EmptyJWTToken");
     }
 }

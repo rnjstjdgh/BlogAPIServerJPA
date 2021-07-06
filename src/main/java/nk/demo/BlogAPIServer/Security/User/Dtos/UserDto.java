@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import nk.demo.BlogAPIServer.Security.User.UserEntity;
 
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,9 @@ public class UserDto implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private LocalDateTime 		regDate;		//등록일자
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime 		updateDate;		//수정일자
+
 
     public UserEntity toEntity(){
         return UserEntity.builder()
@@ -34,16 +38,18 @@ public class UserDto implements UserDetails {
                             .password(password)
                             .role(role)
                             .regDate(regDate)
+                            .updateDate(updateDate)
                             .build();
     }
     
     @Builder
-    public UserDto(Long userId, String email, String password, String role, LocalDateTime regDate){
+    public UserDto(Long userId, String email, String password, String role, LocalDateTime regDate, LocalDateTime updateDate){
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.role = role;
         this.regDate = regDate;
+        this.updateDate = updateDate;
     }
 
 

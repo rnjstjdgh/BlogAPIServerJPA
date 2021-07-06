@@ -119,6 +119,7 @@ public class CustomUserDetailService implements UserDetailsService {
         				.password(userEntity.getPassword())
         				.role(userEntity.getRole())
         				.regDate(userEntity.getRegDate())
+						.updateDate(userEntity.getUpdateDate())
         				.build();
     }
 }

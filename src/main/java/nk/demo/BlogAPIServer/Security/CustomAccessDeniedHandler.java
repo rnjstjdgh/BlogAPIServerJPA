@@ -20,6 +20,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception) throws IOException,
             ServletException {
-		response.sendRedirect("/JWTException/accessdenied");
+		response.setStatus(HttpServletResponse.SC_SEE_OTHER);
+		response.setHeader("Location","/JWTException/accessdenied");
 	}
 }

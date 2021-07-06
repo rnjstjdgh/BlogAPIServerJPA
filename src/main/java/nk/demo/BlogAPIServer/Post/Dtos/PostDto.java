@@ -15,7 +15,8 @@ public class PostDto {
 	private Long 			userId;			//작성자의 아이디(foreign key)
 	private String 			contents;		//내용
 	private LocalDateTime 	regDate;		//등록일자
-	
+	private LocalDateTime 	updateDate;		//등록일자
+
 	public PostEntity toEntity() {
 		return PostEntity.builder()
 							.postId(postId)
@@ -23,16 +24,18 @@ public class PostDto {
 							.userId(userId)
 							.contents(contents)
 							.regDate(regDate)
+							.updateDate(updateDate)
 							.build();
 	}
 	
 	@Builder
-	public PostDto(Long postId, String title, Long userId, String contents, LocalDateTime regDate) {
+	public PostDto(Long postId, String title, Long userId, String contents, LocalDateTime regDate, LocalDateTime updateDate) {
 		this.postId = postId;
 		this.title = title;
 		this.userId = userId;
 		this.contents = contents;
 		this.regDate = regDate;
+		this.updateDate = updateDate;
 	}
 	
 }

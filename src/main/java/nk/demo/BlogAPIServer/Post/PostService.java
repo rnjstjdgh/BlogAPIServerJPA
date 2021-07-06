@@ -107,6 +107,7 @@ public class PostService {
         				.userId(postEntity.getUserId())
         				.contents(postEntity.getContents())
         				.regDate(postEntity.getRegDate())
+						.updateDate(postEntity.getUpdateDate())
         				.build();
     }
 }

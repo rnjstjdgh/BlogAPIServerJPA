@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -50,12 +52,17 @@ public class UserEntity{
     @Column(updatable = false)
 	private LocalDateTime 		regDate;		//등록일자
 
+    @LastModifiedDate
+    private LocalDateTime 		updateDate;		//수정일자
+
+
     @Builder
-    public UserEntity(Long userId, String email, String password, String role, LocalDateTime regDate){
+    public UserEntity(Long userId, String email, String password, String role, LocalDateTime regDate, LocalDateTime updateDate){
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.role = role;
         this.regDate = regDate;
+        this.updateDate = updateDate;
     }
 }
