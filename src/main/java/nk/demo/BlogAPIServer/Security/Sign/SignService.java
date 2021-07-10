@@ -6,6 +6,7 @@ import nk.demo.BlogAPIServer.Response.CommonResult;
 import nk.demo.BlogAPIServer.Response.ResponseService;
 import nk.demo.BlogAPIServer.Response.SingleResult;
 import nk.demo.BlogAPIServer.Security.JWT.JwtTokenProvider;
+import nk.demo.BlogAPIServer.Security.Sign.model.SignInResult;
 import nk.demo.BlogAPIServer.Security.User.UserEntity;
 import nk.demo.BlogAPIServer.Security.User.UserRepository;
 
@@ -21,7 +22,9 @@ public class SignService {
     private final ResponseService 		responseService;
     private final PasswordEncoder 		passwordEncoder;
 
-    public SingleResult<String> signin(String email, String password) {
+
+
+    public SingleResult<SignInResult> signin(String email, String password) {
         UserEntity findedUserEntity = userRepository.findByEmail(email);
         if(findedUserEntity == null )
             throw new SignFailedException("login fail, check email");
@@ -29,8 +32,8 @@ public class SignService {
         if (!passwordEncoder.matches(password, findedUserEntity.getPassword()))
             throw new SignFailedException("login fail, check password");
 
-        return responseService.getSingleResult(
-                jwtTokenProvider.createToken(String.valueOf(findedUserEntity.getEmail()), findedUserEntity.getRole()));
+        return responseService.getSingleResult(new SignInResult(
+                jwtTokenProvider.createToken(String.valueOf(findedUserEntity.getEmail()), findedUserEntity.getRole()),findedUserEntity.getUserId()));
     }
 
     public CommonResult signup(String email, String password) {

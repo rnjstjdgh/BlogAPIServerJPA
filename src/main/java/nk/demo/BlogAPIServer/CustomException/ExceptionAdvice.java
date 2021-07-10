@@ -17,7 +17,7 @@ public class ExceptionAdvice {
 
     private final ResponseService responseService;
 
-	@ExceptionHandler(ApiValidationException.class)
+	@ExceptionHandler(ClientDataValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected CommonResult postExceptionHandler(Exception ex) {
 		return responseService.getFailResult(ex.getMessage());

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,12 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 
 @SequenceGenerator(name = "userTable_SEQ_GENERATOR", sequenceName = "userTable_SEQ", initialValue = 1, allocationSize = 1)
@@ -31,7 +26,7 @@ import javax.persistence.*;
 @Builder            // builder를 사용할수 있게 합니다.
 @Getter             // user 필드값의 getter를 자동으로 생성합니다.
 @Setter
-@NoArgsConstructor  // 인자없는 생성자를 자동으로 생성합니다.
+@NoArgsConstructor(access = AccessLevel.PROTECTED)  // 인자없는 생성자를 자동으로 생성합니다.
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity{
 

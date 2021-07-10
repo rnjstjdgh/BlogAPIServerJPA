@@ -191,9 +191,9 @@ public class UserControllerTest {
 
 	private String getJWTToken(String response) throws Exception {
 		JSONParser parser = new JSONParser();
-		Object obj = parser.parse(response);
-		JSONObject jsonObj = (JSONObject) obj;
-		return (String) jsonObj.get("data");
+		JSONObject jsonObj = (JSONObject)parser.parse(response);
+		jsonObj = (JSONObject) jsonObj.get("data");
+		return (String) jsonObj.get("token");
 	}
 
 }

@@ -1,6 +1,5 @@
 package nk.demo.BlogAPIServer.Security.User;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,7 +56,7 @@ public class UserController {
 		@ApiImplicitParam(name = "userId",value = "사용자 번호", example = "1" )
 	})
 	public SingleResult<UserDto> get(@PathVariable Long userId) {
-		return responseService.getSingleResult(customUserDetailService.get(userId));
+		return responseService.getSingleResult(customUserDetailService.getById(userId));
 	}
 	
 	/**

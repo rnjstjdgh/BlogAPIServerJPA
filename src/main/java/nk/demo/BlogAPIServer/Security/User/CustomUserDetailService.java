@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import nk.demo.BlogAPIServer.CustomException.ApiValidationException;
+import nk.demo.BlogAPIServer.CustomException.ClientDataValidationException;
 import nk.demo.BlogAPIServer.Security.User.Dtos.BasicUserDto;
 import nk.demo.BlogAPIServer.Security.User.Dtos.UserDto;
 
@@ -31,6 +31,8 @@ public class CustomUserDetailService implements UserDetailsService {
 	 * **/
 	public List<UserDto> getList(){
 		List<UserEntity> userEntityList = userRepository.findAll();
+		if(userEntityList.size() == 0)
+			throw new ClientDataValidationException("There is no corresponding information.");
 		List<UserDto> userDtoList = new ArrayList<>();
 		for(UserEntity userEntity : userEntityList)
 			userDtoList.add(this.convertEntityToDto(userEntity));
@@ -43,15 +45,29 @@ public class CustomUserDetailService implements UserDetailsService {
 	 * @param userId
 	 * @return
 	 * **/
-	public UserDto get(Long userId) {
+	public UserDto getById(Long userId) {
 		if(userId < 0)
-			throw new ApiValidationException("userId cannot be minus.");
+			throw new ClientDataValidationException("userId cannot be minus.");
 		UserEntity userEntity = userRepository.findByuserId(userId);
 		if(userEntity == null)
-			throw new ApiValidationException("There is no corresponding information for userId.");
+			throw new ClientDataValidationException("There is no corresponding information for userId.");
 		return convertEntityToDto(userEntity);
 	}
-	
+
+	/**
+	 * {email}에 해당하는 사용자 리턴
+	 * @param email
+	 * @return
+	 * **/
+	public UserDto getByEmail(String email) {
+		if(email == null)
+			throw new ClientDataValidationException("email cannot be null.");
+		UserEntity userEntity = userRepository.findByEmail(email);
+		if(userEntity == null)
+			throw new ClientDataValidationException("There is no corresponding information for email.");
+		return convertEntityToDto(userEntity);
+	}
+
 	/**
 	 * 하나의 사용자 등록
 	 * @param userDto
@@ -59,7 +75,7 @@ public class CustomUserDetailService implements UserDetailsService {
 	 * **/
 	public Long save(BasicUserDto userDto) {
 		if(userDto.getEmail() == null || userDto.getPassword() == null || userDto.getRole() == null)
-			throw new ApiValidationException("Not enough user data.");
+			throw new ClientDataValidationException("Not enough user data.");
 
 		UserEntity userEntity = userDto.toEntity();
 		userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
@@ -74,13 +90,13 @@ public class CustomUserDetailService implements UserDetailsService {
 	 * **/
 	public Long update(Long userId, BasicUserDto userDto) {
 		if(userId <= 0)
-			throw new ApiValidationException("userId cannot be minus.");
+			throw new ClientDataValidationException("userId cannot be minus.");
 
 		if(userDto.getEmail() == null || userDto.getPassword() == null || userDto.getRole() == null)
-			throw new ApiValidationException("Not enough user data.");
+			throw new ClientDataValidationException("Not enough user data.");
 
 		if(userRepository.findByuserId(userId) ==null)
-			throw new ApiValidationException("There is no corresponding information for userId.");
+			throw new ClientDataValidationException("There is no corresponding information for userId.");
 
 		UserEntity userEntity = userDto.toEntity();
 		userEntity.setUserId(userId);
@@ -98,9 +114,9 @@ public class CustomUserDetailService implements UserDetailsService {
 	@Transactional
 	public Long delete(Long userId) {
 		if(userId <= 0) 
-			throw new ApiValidationException("userId cannot be minus.");
+			throw new ClientDataValidationException("userId cannot be minus.");
 		if(userRepository.findByuserId(userId) ==null)
-			throw new ApiValidationException("There is no corresponding information for userId.");
+			throw new ClientDataValidationException("There is no corresponding information for userId.");
 		userRepository.deleteByUserId(userId);
 		return userId;
 	}

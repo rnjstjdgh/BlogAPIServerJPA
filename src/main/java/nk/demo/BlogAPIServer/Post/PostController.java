@@ -1,22 +1,15 @@
 package nk.demo.BlogAPIServer.Post;
 
 
+import io.swagger.annotations.*;
 import nk.demo.BlogAPIServer.Post.Dtos.BasicPostDto;
 import nk.demo.BlogAPIServer.Post.Dtos.PostDto;
+import nk.demo.BlogAPIServer.Security.User.CustomUserDetailService;
+import nk.demo.BlogAPIServer.Security.User.Dtos.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.*;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import nk.demo.BlogAPIServer.Response.ListResult;
 import nk.demo.BlogAPIServer.Response.ResponseService;
 import nk.demo.BlogAPIServer.Response.SingleResult;
@@ -33,6 +26,9 @@ public class PostController {
 	
 	@Autowired
 	private PostService postService;
+
+	@Autowired
+	private CustomUserDetailService customUserDetailService;
 	
 	@Autowired
 	private ResponseService responseService;
@@ -46,8 +42,21 @@ public class PostController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = false, dataType = "String", paramType = "header")
 	})
-	public ListResult<PostDto> getList(){
-		return responseService.getListResult(postService.getList());
+	public ListResult<PostDto> getList(@ApiParam(value = "제목 검색 키워드") @RequestParam(required = false) String title,
+									   @ApiParam(value = "사용자 검색 키워드") @RequestParam(required = false) String email){
+		if(title == null && email == null)
+			return responseService.getListResult(postService.getList());
+		else if(title != null && email != null){
+			UserDto userDto = customUserDetailService.getByEmail(email);
+			return responseService.getListResult(postService.getList(userDto.getUserId(),title));
+		}
+		else if(title != null && email ==null){
+			return responseService.getListResult(postService.getList(title));
+		}
+		else{
+			UserDto userDto = customUserDetailService.getByEmail(email);
+			return responseService.getListResult(postService.getList(userDto.getUserId()));
+		}
 	}
 	
 	/**
@@ -68,6 +77,7 @@ public class PostController {
 
 	/**
 	 * 하나의 게시글 등록, 등록된 게시글의 postId리턴
+	 * 자기 게시글만 자기가 쓸 수 있음 => 클라에서 보낸 user id와 지금 로그인 된 id 검증 필요
 	 * @param basicPostDto
 	 * @return
 	 * **/
@@ -82,6 +92,7 @@ public class PostController {
 	
 	/**
 	 * {postId}에 해당하는 게시글 수정, 수정된 게시글의 postId리턴
+	 * 자기 게시글만 자신이 수정 가능 => 클라에서 보낸 user id와 지금 로그인 된 id 검증 필요
 	 * @param postId, post
 	 * @return
 	 * **/
@@ -97,6 +108,7 @@ public class PostController {
 	
 	/**
 	 * {postId}에 해당하는 게시글 삭제, 삭제된 게시글의 postId리턴
+	 * 자기 게시글만 자신이 삭제 가능 => 클라에서 보낸 user id와 지금 로그인 된 id 검증 필요
 	 * @param postId
 	 * @return
 	 * **/

@@ -3,6 +3,7 @@ package nk.demo.BlogAPIServer.Security.Sign;
 import io.swagger.annotations.ApiParam;
 import nk.demo.BlogAPIServer.CustomException.CustomNullPointException;
 
+import nk.demo.BlogAPIServer.Security.Sign.model.SignInResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,8 +26,8 @@ public class SignController {
 
 	@ApiOperation(value = "로그인", notes = "이메일 회원 로그인을 한다.")
 	@PostMapping(value = "/signin")
-	public SingleResult<String> signin(@ApiParam(value = "이메일", required = true) @RequestParam("email") String email,
-									   @ApiParam(value = "비밀번호", required = true) @RequestParam("password") String password) {
+	public SingleResult<SignInResult> signin(@ApiParam(value = "이메일", required = true) @RequestParam("email") String email,
+											 @ApiParam(value = "비밀번호", required = true) @RequestParam("password") String password) {
 		if(email == null || password == null)
 			throw  new CustomNullPointException("email or password should be included");
 		return signService.signin(email,password);

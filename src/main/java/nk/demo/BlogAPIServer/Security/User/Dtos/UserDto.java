@@ -18,7 +18,6 @@ import java.util.Collection;
 @Getter @Setter
 public class UserDto implements UserDetails {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long 				userId;
     private String 				email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
