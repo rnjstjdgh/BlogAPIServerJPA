@@ -51,17 +51,17 @@ public class UserControllerTest {
 	@BeforeAll
 	void initAll() throws Exception {
 		// 정상 요청
-		BasicUserDto basicUserDto = BasicUserDto.builder().email("gshgsh1111@gmail.com").password("Rnjs@1q2w3e")
+		BasicUserDto basicUserDto = BasicUserDto.builder().email("userTest1111@gmail.com").password("Rnjs@1q2w3e")
 				.role("ROLE_USER").build();
 		jsonUserNormal = objectMapper.writeValueAsString(basicUserDto);
 
 		basicUserDto = BasicUserDto.builder().password("Rnjs@1q2w3e").role("ROLE_USER").build();
 		jsonUserEmailNull = objectMapper.writeValueAsString(basicUserDto);
 
-		basicUserDto = BasicUserDto.builder().email("gshgsh1111@gmail.com").role("ROLE_USER").build();
+		basicUserDto = BasicUserDto.builder().email("userTest1111@gmail.com").role("ROLE_USER").build();
 		jsonUserPasswordNull = objectMapper.writeValueAsString(basicUserDto);
 
-		basicUserDto = BasicUserDto.builder().email("gshgsh1111@gmail.com").password("Rnjs@1q2w3e").build();
+		basicUserDto = BasicUserDto.builder().email("userTest1111@gmail.com").password("Rnjs@1q2w3e").build();
 		jsonUserRoleNull = objectMapper.writeValueAsString(basicUserDto);
 
 		// 회원가입
@@ -76,24 +76,24 @@ public class UserControllerTest {
 
 		// 회원가입
 		mockMvc.perform(
-				MockMvcRequestBuilders.post("/signup").content("email=gshgsh0831@gmail.com&password=Rnjs@123456789")
+				MockMvcRequestBuilders.post("/signup").content("email=userTest0831@gmail.com&password=Rnjs@123456789")
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().isOk());
 		// 로그인
 		mvcResult = mockMvc.perform(
-				MockMvcRequestBuilders.post("/signin").content("email=gshgsh0831@gmail.com&password=Rnjs@123456789")
+				MockMvcRequestBuilders.post("/signin").content("email=userTest0831@gmail.com&password=Rnjs@123456789")
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().isOk()).andReturn();
 		testUserToken = getJWTToken(mvcResult.getResponse().getContentAsString());
 
 		// 회원가입
 		mockMvc.perform(
-				MockMvcRequestBuilders.post("/signup").content("email=gshgsh123123@gmail.com&password=Rnjs@123456789")
+				MockMvcRequestBuilders.post("/signup").content("email=userTest123123@gmail.com&password=Rnjs@123456789")
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().isOk());
 		// 로그인
 		mvcResult = mockMvc.perform(
-				MockMvcRequestBuilders.post("/signin").content("email=gshgsh123123@gmail.com&password=Rnjs@123456789")
+				MockMvcRequestBuilders.post("/signin").content("email=userTest123123@gmail.com&password=Rnjs@123456789")
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().isOk()).andReturn();
 	}

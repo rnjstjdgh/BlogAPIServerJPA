@@ -55,12 +55,12 @@ public class PostControllerTest {
 	void initAll() throws Exception {
 		// 회원가입
 		mockMvc.perform(
-				MockMvcRequestBuilders.post("/signup").content("email=gshgsh0831@gmail.com&password=Rnjs@123456789")
+				MockMvcRequestBuilders.post("/signup").content("email=postTest@gmail.com&password=Rnjs@123456789")
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().isOk());
 		// 로그인
 		MvcResult mvcResult = mockMvc.perform(
-				MockMvcRequestBuilders.post("/signin").content("email=gshgsh0831@gmail.com&password=Rnjs@123456789")
+				MockMvcRequestBuilders.post("/signin").content("email=postTest@gmail.com&password=Rnjs@123456789")
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().isOk()).andReturn();
 		testToken = getJWTToken(mvcResult.getResponse().getContentAsString());
