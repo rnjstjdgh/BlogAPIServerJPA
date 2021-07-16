@@ -2,7 +2,6 @@ package nk.demo.BlogAPIServer.Post;
 
 import java.util.List;
 
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
